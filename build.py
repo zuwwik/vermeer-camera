@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import tempfile
+import time
 
 
 def main():
@@ -39,15 +41,18 @@ def main():
     env['DESTDIR'] = str(stage)
     subprocess.run(['meson', 'install', '-C', str(build)], env=env, check=True)
     runtime = build / 'runtime'
-    runtime.mkdir(exist_ok=False)
+    next_runtime = Path(tempfile.mkdtemp(prefix='runtime-next-', dir=build))
     for name in ('lib', 'ipa', 'proxy', 'bin'):
-        (runtime / name).mkdir()
+        (next_runtime / name).mkdir()
     for name in ('libcamera.so.0.7.2', 'libcamera-base.so.0.7.2'):
-        shutil.copy2(stage / 'usr/lib' / name, runtime / 'lib' / name)
-        (runtime / 'lib' / name.rsplit('.', 1)[0]).symlink_to(name)
-    shutil.copy2(stage / 'usr/lib/libcamera/ipa/ipa_soft_simple.so', runtime / 'ipa/ipa_soft_simple.so')
-    shutil.copy2(stage / 'usr/libexec/libcamera/soft_ipa_proxy', runtime / 'proxy/soft_ipa_proxy')
-    shutil.copy2(stage / 'usr/bin/cam', runtime / 'bin/vermeer-cam')
+        shutil.copy2(stage / 'usr/lib' / name, next_runtime / 'lib' / name)
+        (next_runtime / 'lib' / name.rsplit('.', 1)[0]).symlink_to(name)
+    shutil.copy2(stage / 'usr/lib/libcamera/ipa/ipa_soft_simple.so', next_runtime / 'ipa/ipa_soft_simple.so')
+    shutil.copy2(stage / 'usr/libexec/libcamera/soft_ipa_proxy', next_runtime / 'proxy/soft_ipa_proxy')
+    shutil.copy2(stage / 'usr/bin/cam', next_runtime / 'bin/vermeer-cam')
+    if runtime.exists():
+        runtime.rename(build / ('runtime-previous-' + str(time.time_ns())))
+    next_runtime.rename(runtime)
     print('Built runtime:', runtime)
 
 
