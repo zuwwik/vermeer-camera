@@ -1,0 +1,12 @@
+version: 1
+configuration:
+  ipa:
+    module_paths:
+    - /usr/local/lib/vermeer-camera/current/ipa
+    proxy_paths:
+    - /usr/local/lib/vermeer-camera/current/proxy
+    config_paths:
+    - /usr/local/share/libcamera/vermeer-colors-20261026
+  software_isp:
+    mode: cpu
+    threads: 2
