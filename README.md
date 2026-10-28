@@ -5,18 +5,19 @@ ultrawide cameras on Poco F6 Pro / Redmi K70. Kernel drivers and board wiring
 are in [vermeer-mainline](https://github.com/zuwwik/vermeer-mainline).
 
 The [libcamera fork](https://github.com/zuwwik/vermeer-libcamera) supplies sensor
-helpers, contrast autofocus, highlight-aware auto exposure and the CPU colour
-matrix acceleration. `libcamera.lock` pins its exact source revision. Native
-CCM tuning is in `tuning/simple/`. These files preserve the working exposure,
-autofocus and stream modes. Experimental denoise, still-processing workers,
-resizing and V4L2 loopback bridges are not included.
+helpers, contrast autofocus, highlight-aware exposure, native colour processing
+and offline RAW10 still processing. `libcamera.lock` pins the exact source.
+Lens power is released outside active capture sessions. Native CCM tuning is
+in `tuning/simple/`; the AE/AF algorithms and sensor modes are preserved.
 
 Default processed sizes: main 4088x3072, front 2296x1728, ultrawide 3272x2464.
-The front camera uses sensor binning for conventional Bayer colour. The main
-camera supports contrast AF; the other modules have fixed-focus lenses. Full
-50 MP, OIS, Android PDAF/HDR and Qualcomm ICP processing are not implemented.
-JPEG settings belong to the camera application; this repository does not change
-the working application's encoding or preview settings.
+The configured preview budget preserves these binned modes and does not reduce
+full RAW still dimensions. Main has contrast AF; front and ultrawide are fixed
+focus. Full 50 MP, OIS, Android PDAF/HDR and Qualcomm ICP are not enabled.
+
+The separate [Plasma Camera fork](https://github.com/zuwwik/vermeer-plasma-camera)
+contains the deployed JPEG 100 still workflow and front/rear orientation fixes.
+Its application binary is packaged there, independently of this runtime.
 
 ## Build
 
@@ -37,7 +38,7 @@ base library, IPA and proxy share a private ABI.
 
 ## Install on the musl phone
 
-`prebuilt/aarch64-linux-musl/` is the exact deployed `ae2-color1` runtime and cam
+`prebuilt/aarch64-linux-musl/` is the exact deployed `20261029-power1` runtime and cam
 tool. It is for the aarch64 musl system, not a glibc rootfs. Verify it with
 `sha256sum -c SHA256SUMS`.
 

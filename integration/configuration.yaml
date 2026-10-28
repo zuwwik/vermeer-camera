@@ -10,3 +10,4 @@ configuration:
   software_isp:
     mode: cpu
     threads: 2
+    preview_max_pixels: 12582912

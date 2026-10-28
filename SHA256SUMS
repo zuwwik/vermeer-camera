@@ -1,5 +1,5 @@
-74b556a62894773f625906a1080e42f73cdf7ca7abbfafcc4197801448e08328  prebuilt/aarch64-linux-musl/bin/vermeer-cam
-ac621fcb587d6fa06bf79a31a424736664cdd45f3c809d322f72374a1d2cbda1  prebuilt/aarch64-linux-musl/ipa/ipa_soft_simple.so
-4c1be9e6a2f80b84196b2768339cb959b52fe928bb1998cbc10a7c418fc4dfaf  prebuilt/aarch64-linux-musl/lib/libcamera-base.so.0.7.2
-bdacc324421b57e312fcbc23f898e2b98d0b2f3a6db9f852ddc24cb991cd0da3  prebuilt/aarch64-linux-musl/lib/libcamera.so.0.7.2
-2b4e9b4ed7e3a8f377612e44773e770f002e1a07580c66b5ea155e9cd05edf43  prebuilt/aarch64-linux-musl/proxy/soft_ipa_proxy
+46fca7dd5db90914b0f815df6ddf3406e170c8462665dd5d4be7809042921add  prebuilt/aarch64-linux-musl/bin/vermeer-cam
+e1690af804add6501ce376fce6aeb5ea6362a05dc1c2e5b75aeb9dfa2d475392  prebuilt/aarch64-linux-musl/ipa/ipa_soft_simple.so
+20877cce40ba04ea6224305f1b36956fcc20f4d2f994d0e29844079fa7db43ca  prebuilt/aarch64-linux-musl/lib/libcamera-base.so.0.7.2
+f4351e80ddf5d3f92114811a02a462fb0a5318bba7580d9cb440163c09244deb  prebuilt/aarch64-linux-musl/lib/libcamera.so.0.7.2
+0e2ac67d668b722e0d06e89ee77f8fce9c5ad6b601bad903aebf9d043a225839  prebuilt/aarch64-linux-musl/proxy/soft_ipa_proxy

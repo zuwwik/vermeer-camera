@@ -14,7 +14,7 @@ import time
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--runtime', type=Path, required=True)
-    parser.add_argument('--version', default='20261026-ae2-color1')
+    parser.add_argument('--version', default='20261029-power1')
     parser.add_argument('--root', type=Path, help='Stage into a mounted target rootfs')
     args = parser.parse_args()
     here = Path(__file__).resolve().parent
