@@ -37,6 +37,36 @@ int main() {
         for(unsigned y=0;y<p.height;y++)for(unsigned x=0;x<p.width;x++)for(int c=0;c<3;c++)
             assert(std::abs(int(image.rgb[(y*p.width+x)*3+c])-int(std::lround((value[c]-64)/959.*255)))<=1);
     }
+    // With WB gains > 1, sensor-clipped white must stay neutral through
+    // the same pre-CCM clipping as preview (all four Bayer arrangements).
+    p.whiteBalance={2.1f,1.f,1.7f};
+    p.colorMatrix={1.3112f,-.1756f,-.1356f,-.2344f,1.5474f,-.313f,-.0504f,-.6847f,1.7351f};
+    p.gamma=2.2f;p.denoise=p.sharpen=p.highlightRolloff=true;
+    for(unsigned order=0;order<4;order++) {
+        p.order=static_cast<StillBayerOrder>(order);
+        for(unsigned y=0;y<p.height;y++)for(unsigned x=0;x<p.width;x++)set(raw,p.stride,x,y,1023);
+        StillImage white;assert(!StillImageProcessor::processRaw10(raw.data(),raw.size(),p,&white));
+        for(size_t i=0;i<white.rgb.size();i+=3) {
+            int lo=std::min({white.rgb[i],white.rgb[i+1],white.rgb[i+2]});
+            int hi=std::max({white.rgb[i],white.rgb[i+1],white.rgb[i+2]});
+            assert(lo>=248 && hi-lo<=1);
+        }
+    }
+    // Compare coloured patches, including a clipped R or B channel, to
+    // independent black level -> WB -> clip -> CCM -> gamma arithmetic.
+    p.gamma=1;p.denoise=p.sharpen=p.highlightRolloff=false;
+    for(auto values : {std::array<int,3>{750,850,700}, {900,400,300}, {300,400,900}, {180,300,140}}) {
+        for(unsigned y=0;y<p.height;y++)for(unsigned x=0;x<p.width;x++)
+            set(raw,p.stride,x,y,values[pattern[3][(y&1)*2+(x&1)]]);
+        StillImage patch;assert(!StillImageProcessor::processRaw10(raw.data(),raw.size(),p,&patch));
+        for(unsigned c=0;c<3;c++) {
+            float linear=0;
+            for(unsigned k=0;k<3;k++)linear+=std::clamp((values[k]-64)/959.f*p.whiteBalance[k],0.f,1.f)*p.colorMatrix[c*3+k];
+            int reference=std::lround(std::clamp(linear,0.f,1.f)*255);
+            for(size_t i=c;i<patch.rgb.size();i+=3)assert(std::abs(int(patch.rgb[i])-reference)<=1);
+        }
+    }
+    p.whiteBalance={1,1,1};p.colorMatrix={1,0,0,0,1,0,0,0,1};
     p.width=256;p.height=128;p.stride=352;p.analogueGain=16;
     raw.assign(p.stride*p.height,0);std::mt19937 rng(17);std::normal_distribution<double> noise(0,8);
     for(unsigned y=0;y<p.height;y++)for(unsigned x=0;x<p.width;x++)set(raw,p.stride,x,y,std::clamp(int(400+noise(rng)),0,1023));

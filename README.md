@@ -12,7 +12,9 @@ in `tuning/simple/`; the AE/AF algorithms and sensor modes are preserved.
 
 Default processed sizes: main 4088x3072, front 2296x1728, ultrawide 3272x2464.
 The configured preview budget preserves these binned modes and does not reduce
-full RAW still dimensions. Main has contrast AF; front and ultrawide are fixed
+full RAW still dimensions. Offline stills clip white-balanced sensor channels
+before the colour matrix, matching preview and keeping clipped highlights neutral.
+Main has contrast AF; front and ultrawide are fixed
 focus. Full 50 MP, OIS, Android PDAF/HDR and Qualcomm ICP are not enabled.
 
 The separate [Plasma Camera fork](https://github.com/zuwwik/vermeer-plasma-camera)
@@ -38,7 +40,7 @@ base library, IPA and proxy share a private ABI.
 
 ## Install on the musl phone
 
-`prebuilt/aarch64-linux-musl/` is the exact deployed `20261029-power1` runtime and cam
+`prebuilt/aarch64-linux-musl/` is the exact deployed `20261029-colour2` runtime and cam
 tool. It is for the aarch64 musl system, not a glibc rootfs. Verify it with
 `sha256sum -c SHA256SUMS`.
 

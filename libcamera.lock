@@ -1,6 +1,6 @@
 {
   "url": "https://github.com/zuwwik/vermeer-libcamera.git",
-  "revision": "97afed0976d8f256aa9e0f3d609c455d828a4c2f",
+  "revision": "f3c84a6044a205cf3ae45844dec4046d39dc5368",
   "upstream_url": "https://git.libcamera.org/libcamera/libcamera.git",
   "upstream_revision": "191e202178f02430b5942397c70d215cdd2056fa",
   "version": "0.7.2"
